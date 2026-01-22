@@ -1,0 +1,4 @@
+data/
+.venv/
+_pychache_
+.vscode/
