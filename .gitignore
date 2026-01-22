@@ -1,4 +1,82 @@
-data/
+# ===============================
+# Python
+# ===============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
 .venv/
-_pychache_
+venv/
+env/
+ENV/
+
+# ===============================
+# OS / Editor
+# ===============================
+.DS_Store
+Thumbs.db
 .vscode/
+.idea/
+
+# ===============================
+# Jupyter
+# ===============================
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# ===============================
+# Data (DO NOT COMMIT RAW/LARGE DATA)
+# ===============================
+data/raw/
+data/processed/
+data/features/
+
+# Allow folder structure
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/features/.gitkeep
+
+# ===============================
+# Model artifacts
+# ===============================
+models/
+checkpoints/
+*.h5
+*.keras
+*.pt
+*.pkl
+
+# ===============================
+# Logs & outputs
+# ===============================
+logs/
+outputs/
+results/
+figures/
+
+# ===============================
+# Test artifacts
+# ===============================
+.coverage
+htmlcov/
+.pytest_cache/
+
+# ===============================
+# Environment & secrets
+# ===============================
+.env
+.env.*
+*.key
+*.secret
+
+# ===============================
+# Misc
+# ===============================
+*.csv
+*.xlsx
+*.parquet
+*.zip
+*.tar.gz
