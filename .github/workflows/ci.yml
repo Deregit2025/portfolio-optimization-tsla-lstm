@@ -1,0 +1,72 @@
+name: ELT & Backtesting Pipeline CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    env:
+      PYTHONPATH: ./src
+
+    steps:
+    # 1️⃣ Checkout repo
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # 2️⃣ Set up Python
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+
+    # 3️⃣ Install dependencies
+    - name: Install dependencies
+      run: |
+        python -m venv .venv
+        source .venv/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # 4️⃣ Run Task 1: Preprocessing
+    - name: Run Task 1 - Data Preprocessing
+      run: |
+        source .venv/bin/activate
+        python src/preprocessing.py
+
+    # 5️⃣ Run Task 2 & 3: Forecasting
+    - name: Run Task 2 & 3 - Forecast Models
+      run: |
+        source .venv/bin/activate
+        python src/models/arima_model.py
+        python src/models/lstm_model.py
+
+    # 6️⃣ Run Task 4: Portfolio Optimization
+    - name: Run Task 4 - Portfolio Optimization
+      run: |
+        source .venv/bin/activate
+        python src/portfolio/optimization.py
+
+    # 7️⃣ Run Task 5: Backtesting
+    - name: Run Task 5 - Backtesting
+      run: |
+        source .venv/bin/activate
+        jupyter nbconvert --to notebook --execute notebooks/backtesting.ipynb --ExecutePreprocessor.timeout=600 --output notebooks/backtesting_ci.ipynb
+
+    # 8️⃣ (Optional) Upload artifacts
+    - name: Upload Backtesting Notebook & Plots
+      uses: actions/upload-artifact@v3
+      with:
+        name: backtesting-results
+        path: |
+          notebooks/backtesting_ci.ipynb
+          notebooks/*.png
